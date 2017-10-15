@@ -269,13 +269,24 @@ void *resizeRegion(void *r, size_t newSize) {
     return (void *)n;
   }
 }
-
+// Find next fit given a prefix as initial position to check
+BlockPrefix_t *findNextFit(BlockPrefix_t *p, size_t s){
+    if(pcheck(p)){
+        while(p){
+            if(!p->allocated && computeUsableSpace(p) >= s)
+                return p;
+            p = getNextPrefix(p);
+        }
+    }
+    return (BlockPrefix_t *)0;                  // Failed: p is not within the arena
+        
+}
 // Best-Fit Memory Management Implementation 
 void *bestFitAllocRegion(size_t s){
     size_t asize, availSize, currSize;
     BlockPrefix_t *p, *cp;              // current prefix => cp
     
-    asize = align8(s);
+    asize = align8(s) + prefixSize + suffixSize;
     if(arenaBegin == 0)
         initializeArena();
     
@@ -291,8 +302,8 @@ void *bestFitAllocRegion(size_t s){
             }
             cp = findNextFit(getNextPrefix(cp), s);    // Compute next fit after the current
         }        
-        if(availSize >= (asize + prefixSize + suffixSize = 8)){     // split block ?
-                void *freeSliverStart = (void *)p + prefixSize + suffixSize + asize;
+        if(availSize >= (asize + 8)){     // split block ?
+                void *freeSliverStart = (void *)p + asize;
                 void *freeSliverEnd = computeNextPrefixAddr(p);
                 makeFreeBlock(freeSliverStart, freeSliverEnd - freeSliverStart);
                 makeFreeBlock(p, freeSliverStart - (void*)p);
@@ -306,19 +317,62 @@ void *bestFitAllocRegion(size_t s){
         
     
 }
-BlockPrefix_t *findNextFit(BlockPrefix_t *p, size_t s){
-    if(pcheck(p)){
-        while(p){
-            if(!p->allocated && computeUsableSpace(p) >= s)
-                return p;
-            p = getNextPrefix(p);
-        }
-    }
-    return (BlockPrefix_t *)0;                  // Failed: p is not within the arena
+BlockPrefix_t *nextPrefixAllocRegion(BlockPrefix_t *p, size_t s){
+    size_t asize, availSize;
+    BlockPrefix_t *np;                // Next prefix
         
+    if(p && pcheck(p) && s > 0){   /* s ? */
+        asize = align8(s) + prefixSize + suffixSize;
+        np = getNextPrefix(p);              // Is there next prefix ?
+        if(!np){
+            np = growArena(s);              // If p is last, grow arena
+        }                                       
+        // is next prefix disallocated AND is there enough space ?
+        if(np && !np->allocated && (availSize=computeUsableSpace(np)) >= s){  
+            if(availSize >= (asize + 8)){
+                void *freeSliverStart = (void *)np + asize;
+                void *freeSliverEnd = computeNextPrefixAddr(np);
+                makeFreeBlock(freeSliverStart, freeSliverEnd - freeSliverStart);
+                makeFreeBlock(np, freeSliverStart - (void *)np); /* piece being allocated */
+            }
+            np->allocated = 1;		/* mark as allocated */
+            return np;	
+        }
+    }        
+    return (BlockPrefix_t *)0;
+    
 }
-
-
+void *resizeRegion2(void *r, size_t newSize){
+    int oldSize;
+    BlockPrefix_t *pr;
+    if(r != (void *)0){
+        pr = regionToPrefix(r);
+        oldSize = computeUsableSpace(pr);
+    }else{
+        oldSize = 0;
+    }
+    if(oldSize >= newSize)
+        return r;
+    else {
+        BlockPrefix_t *np = nextPrefixAllocRegion(pr, newSize-oldSize);
+        if(np){
+            pr->allocated = 0; np->allocated = 0;       // mark as disallocated to merge them
+            np = coalescePrev(np);
+            if(pr == np){             // coalesce success as expected ?
+                pr->allocated = 1;
+                return r;
+            }
+            pr->allocated = 1; np->allocated = 1;
+            freeRegion(np);
+        }
+        char *o = (char *)r;                            // There is no next, find other space
+        char *n = (char *)firstFitAllocRegion(newSize);
+        for(int i=0; i < oldSize; i++)
+            n[i] = o[i];
+        freeRegion(o);
+        return (void *)n;
+    }   
+}
 
 
 
