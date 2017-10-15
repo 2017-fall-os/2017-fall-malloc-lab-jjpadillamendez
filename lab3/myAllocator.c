@@ -349,6 +349,7 @@ void *resizeRegion2(void *r, size_t newSize){
         pr = regionToPrefix(r);
         oldSize = computeUsableSpace(pr);
     }else{
+        pr = (BlockPrefix_t *)0;
         oldSize = 0;
     }
     if(oldSize >= newSize)
