@@ -15,7 +15,7 @@ void *malloc(size_t NBYTES) {
 
 
 void *realloc(void *APTR, size_t NBYTES) {
-    return resizeRegion(APTR, NBYTES);
+    return resizeRegion2(APTR, NBYTES);
 }
 
 void free(void *APTR) { freeRegion(APTR); }

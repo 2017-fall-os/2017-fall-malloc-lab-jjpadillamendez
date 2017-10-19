@@ -30,9 +30,10 @@ int main()
   printf("%8zx %8zx %8zx\n", p1, p2, p3);
   arenaCheck();
   free(p2);
+  printf("free(p2) \n");
   printf("%8zx \n", p1);
-  printf("Realloc p1 \n");
-  p1 = realloc(p1, 400);
+  printf("Realloc p1 513 \n");
+  p1 = realloc(p1, 513);
   printf("%8zx \n", p1);
   arenaCheck();
   free(p3);
