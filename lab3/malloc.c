@@ -9,7 +9,8 @@
 /* first, the standard malloc functions */
 
 void *malloc(size_t NBYTES) {
-  return firstFitAllocRegion(NBYTES);
+//   return firstFitAllocRegion(NBYTES);
+    return nextFitAllocRegion(NBYTES);
 }
 
 
