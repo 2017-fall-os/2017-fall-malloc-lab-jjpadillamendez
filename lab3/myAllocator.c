@@ -270,7 +270,15 @@ void *resizeRegion(void *r, size_t newSize) {
     return (void *)n;
   }
 }
-// Find next fit given a prefix as initial position to check
+
+////////////////////////////////////////////////////////////
+// Author: Jesus Jose Padilla Mendez    Lab Assignment 3  //
+// Prof: Dr. Freudenthal    TA: Adrian Veliz              //
+// Implementation of Best-fit and First-fit free-memory   //
+// management, and resizeRegion                           //
+////////////////////////////////////////////////////////////
+
+// Find next fit given a prefix as initial position to check, and a position as stopping condition
 BlockPrefix_t *findNextFit(BlockPrefix_t *p, BlockPrefix_t *stop, size_t s){
     if(pcheck(p)){
         while(p && p != stop){
@@ -280,9 +288,9 @@ BlockPrefix_t *findNextFit(BlockPrefix_t *p, BlockPrefix_t *stop, size_t s){
         }
     }
     return (BlockPrefix_t *)0;                  // Failed: p is not within the arena
-        
 }
-// Best-Fit Memory Management Implementation 
+
+// Best-Fit Free-Memory Management Implementation 
 void *bestFitAllocRegion(size_t s){
     size_t asize, availSize, currSize;
     BlockPrefix_t *p, *cp;              // current prefix => cp
@@ -311,14 +319,12 @@ void *bestFitAllocRegion(size_t s){
         }
         p->allocated = 1;
         return prefixToRegion(p);
-    }
-    else{
+    }else{
         return (void *)0;               // Failed: unavailable to grow arena
     }
-        
-    
 }
-// Best-Fit Memory Management Implementation 
+
+// Next-Fit Free-Memory Management Implementation 
 void *nextFitAllocRegion(size_t s){
     static BlockPrefix_t *lastPrefix = (BlockPrefix_t *)0;
     size_t asize, availSize, currSize;
@@ -352,40 +358,44 @@ void *nextFitAllocRegion(size_t s){
         }
     }
     return (void *)0;
-    
 }
-size_t computeSpace(BlockPrefix_t *p) { /* useful space within a block */
+
+// Computes the space of the block including usable space, prefix and suffix
+size_t computeSpace(BlockPrefix_t *p) { 
     return ((void *)(p->suffix) + suffixSize) - (void *)p;
-    
 }
+
+// Extends a block region if there are enough space next to it
 int extendAllocRegion(BlockPrefix_t *p, size_t s){
     size_t asize;
-    BlockPrefix_t *np;                // Next prefix
+    BlockPrefix_t *np;                 // Next prefix
         
-    if(p && pcheck(p) && s > 0){   /* s ? */
+    if(p && pcheck(p) && s > 0){  
         asize = align8(s);
-        np = getNextPrefix(p);              // Is there next prefix ?
+        np = getNextPrefix(p);         // Is there next prefix ?
         if(!np){
-            return 0;                       // returns 0; if p is the last
+            return 0;                  // returns 0; if p is the last
         }                                       
-        // is next prefix disallocated AND is there enough space ?
+        // is next prefix deallocated AND is there enough space ?
         if(np && !np->allocated){
             if(computeUsableSpace(np) >= asize){     
                 makeFreeBlock((void *)p, computeSpace(p)+asize);
                 makeFreeBlock((void *)np+asize, computeSpace(np)-asize); /* piece being allocated */
-            }else if(computeSpace(np) >= asize){     // Space is achieved by counting removed prefix and suffix
+            }else if(computeSpace(np) >= asize){     
                 p->allocated = 0;
                 coalescePrev(np);
             }else{
-                return -1;              // Not enough space, impossible to extend
+                return -1;             // Not enough space, impossible to extend
             }
             p->allocated = 1;
             return 1;
         }
     }        
-    return -1;                       // Next is occupied, impossible to extend
-    
+    return -1;                        // Next is occupied, impossible to extend
 }
+
+// resizeRegion2 which just extends the allocated region if it is possible
+// otherwise, it will find another memory allocation and copy all the data
 void *resizeRegion2(void *r, size_t newSize){
     int oldSize;
     BlockPrefix_t *pr;
