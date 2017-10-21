@@ -2,6 +2,7 @@
 
 #include "myAllocator.h"
 #include "string.h"
+#include "malloc.h"
 
 #define align4(x) ((x+3) & ~3)
 #define align8(x) ((x+7) & ~7)
@@ -9,8 +10,17 @@
 /* first, the standard malloc functions */
 
 void *malloc(size_t NBYTES) {
-//   return firstFitAllocRegion(NBYTES);
-    return nextFitAllocRegion(NBYTES);
+//     switch(algorithm){
+//         case FIRST_FIT:
+//             return firstFitAllocRegion(NBYTES);
+//         case BEST_FIT:
+//             return bestFitAllocRegion(NBYTES);
+//         case NEXT_FIT:
+//             return nextFitAllocRegion(NBYTES);
+//         default:
+//             return (void *)0;
+//     }
+    return firstFitAllocRegion(NBYTES);
 }
 
 
