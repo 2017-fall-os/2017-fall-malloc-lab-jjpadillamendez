@@ -52,12 +52,13 @@
 #define prefixSize align8(sizeof(BlockPrefix_t))
 #define suffixSize align8(sizeof(BlockSuffix_t))
 
+static BlockPrefix_t *lastPrefix = (BlockPrefix_t *)0;
+
 /* how much memory to ask for */
 const size_t DEFAULT_BRKSIZE = 0x100000;	/* 1M */
 
 /* create a block, mark it as free */
-BlockPrefix_t *makeFreeBlock
-(void *addr, size_t size) { 
+BlockPrefix_t *makeFreeBlock(void *addr, size_t size) { 
   BlockPrefix_t *p = addr;
   void *limitAddr = addr + size;
   BlockSuffix_t *s = limitAddr - align8(sizeof(BlockSuffix_t));
@@ -118,12 +119,20 @@ BlockPrefix_t *coalescePrev(BlockPrefix_t *p) {	/* coalesce p with prev, return 
 
 
 void coalesce(BlockPrefix_t *p) {	/* coalesce p with prev & next */
-    if (p != (void *)0) {
-        BlockPrefix_t *next;
-	p = coalescePrev(p);
-	next = getNextPrefix(p);
-	if (next) 
-	    coalescePrev(next);
+    BlockPrefix_t *next, *tp, *np;
+    if(p != (void *)0) {
+        tp = p;
+        p = coalescePrev(p);
+        next = getNextPrefix(p);
+        if(next) 
+            np = coalescePrev(next);
+        
+        if(lastPrefix){
+            if(tp == lastPrefix && p != lastPrefix)
+                lastPrefix = p;
+            else if(next && next == lastPrefix && np != lastPrefix) 
+                lastPrefix = np;
+        }
     }
 }
 
@@ -228,7 +237,7 @@ void *firstFitAllocRegion(size_t s) {
     }
     p->allocated = 1;		/* mark as allocated */
     return prefixToRegion(p);	/* convert to *region */
-  } else {			/* failed */
+  }else {			/* failed */
     return (void *)0;
   }
   
@@ -236,9 +245,9 @@ void *firstFitAllocRegion(size_t s) {
 
 void freeRegion(void *r) {
     if (r != 0) {
-	BlockPrefix_t *p = regionToPrefix(r); /* convert to block */
-	p->allocated = 0;	/* mark as free */
-	coalesce(p);
+        BlockPrefix_t *p = regionToPrefix(r); /* convert to block */
+        p->allocated = 0;	/* mark as free */
+        coalesce(p);
     }
 }
 
@@ -326,7 +335,6 @@ void *bestFitAllocRegion(size_t s){
 
 // Next-Fit Free-Memory Management Implementation 
 void *nextFitAllocRegion(size_t s){
-    static BlockPrefix_t *lastPrefix = (BlockPrefix_t *)0;
     size_t asize, availSize, currSize;
     BlockPrefix_t *p, *tp;              // current prefix => cp
     
@@ -354,6 +362,7 @@ void *nextFitAllocRegion(size_t s){
                 makeFreeBlock(p, freeSliverStart - (void*)p);
             }
             p->allocated = 1;
+            lastPrefix = p;
             return prefixToRegion(p);
         }
     }

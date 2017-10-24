@@ -18,8 +18,7 @@ void getutime(struct timeval *t)
   *t = usage.ru_utime;
 }
 
-int main() 
-{
+int main(){
   void *p1, *p2, *p3, *p4, *p5, *p6, *p7;
   
   
@@ -64,7 +63,7 @@ int main()
       if (bestFitAllocRegion(4) == 0) 
 	break;
     getutime(&t2);
-    printf("\n%d nextFitAllocRegion(4) required %f seconds\n", i, diffTimeval(&t2, &t1));
+    printf("\n%d bestFitAllocRegion(4) required %f seconds\n", i, diffTimeval(&t2, &t1));
   }
   
   return 0;
