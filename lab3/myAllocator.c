@@ -350,7 +350,7 @@ void *nextFitAllocRegion(size_t s){
             availSize = computeUsableSpace(p);
         else if(p = findNextFit(arenaBegin, tp, s))
             availSize = computeUsableSpace(p);
-        else {
+        else{
             p = growArena(s);
             availSize = computeUsableSpace(p);
         }
@@ -431,7 +431,10 @@ void *resizeRegion2(void *r, size_t newSize){
         }
     }   
 }
-
+// If next fit is used, this prints the last prefix that was checked
+void printLastPrefix(){
+    printf("Last prefix: %p \n", lastPrefix);
+}
 
 
 

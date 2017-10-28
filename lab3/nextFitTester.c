@@ -20,51 +20,74 @@ void getutime(struct timeval *t)
 
 int main(){
   void *p1, *p2, *p3, *p4, *p5, *p6, *p7;
-  
-  
+    
   printf("\nTEST CASE 1: Next fit is the first fit free block .'\n");
-  printf(" INITIAL STATE: \n");
   p1 = nextFitAllocRegion(254);        // Allocate four different chuncks of memory 
+  printf(": p1 = nextFitAllocRegion(254)   , ");
+  printLastPrefix();
   p2 = nextFitAllocRegion(25400);
+  printf(": p2 = nextFitAllocRegion(25400) , ");
+  printLastPrefix();
   p3 = nextFitAllocRegion(300);
+  printf(": p3 = nextFitAllocRegion(25400) , ");
+  printLastPrefix();
   freeRegion(p1);                     // Free region p1
-  arenaCheck();
-  printf(" FINAL STATE: \n");
-  p1 = nextFitAllocRegion(240);      // Allocate new region at p3
-  arenaCheck();
-  freeRegion(p2); freeRegion(p3); freeRegion(p1);
+  printf(": freeRegion(p1) , ");
+  printLastPrefix();
   
-//   printf("\nTEST CASE 2: Prove that it is saving last adress for future search .' bestFitAllocRegion(2550)\n");
-//   printf(" INITIAL STATE: \n");
-//   p1 = bestFitAllocRegion(1900);        // Allocate four different chuncks of memory 
-//   p2 = bestFitAllocRegion(2640);
-//   p3 = bestFitAllocRegion(200);
-//   p4 = bestFitAllocRegion(2600);
-//   p5 = bestFitAllocRegion(700);
-//   p6 = bestFitAllocRegion(2700);
-//   p7 = bestFitAllocRegion(400);
-//   freeRegion(p2);                     // Free region p1 and p3
-//   freeRegion(p4);
-//   freeRegion(p6);
-//   arenaCheck();
-//   printf(" FINAL STATE: \n");
-//   p2 = bestFitAllocRegion(2550);      // Allocate new region at p3
-//   arenaCheck();
-//   freeRegion(p1); freeRegion(p2); freeRegion(p3);
-//   freeRegion(p5); freeRegion(p7);
-//   
-//   {				/* measure time for 10000 mallocs */
-//     struct timeval t1, t2;
-//     int i;
-//     getutime(&t1);
-//     for(i = 0; i < 10000; i++)
-//       if (bestFitAllocRegion(4) == 0) 
-// 	break;
-//     getutime(&t2);
-//     printf("\n%d bestFitAllocRegion(4) required %f seconds\n", i, diffTimeval(&t2, &t1));
-//   }
-//   
-//   return 0;
+  printf(" Initial State: \n");
+  arenaCheck();
+  printf(" Final State: \n");
+  p4 = nextFitAllocRegion(240);      // Allocate new region at p3
+  printf(": p4 = nextFitAllocRegion(240) , ");
+  printLastPrefix();
+  arenaCheck();
+  freeRegion(p2);
+  printf(": freeRegion(p2) , ");
+  printLastPrefix();
+  freeRegion(p3); 
+  printf(": freeRegion(p3) , ");
+  printLastPrefix();
+  freeRegion(p4);
+  printf(": freeRegion(p4) , ");
+  printLastPrefix();
+  
+  printf("\nTEST CASE 2: Prove that it searches free space backwards.' bestFitAllocRegion(2550)\n");
+  printf(" Initial State: \n");
+  p1 = nextFitAllocRegion(500000);
+  printf(": p1 = nextFitAllocRegion(500000) , ");
+  printLastPrefix();
+  p2 = nextFitAllocRegion(500000);
+  printf(": p1 = nextFitAllocRegion(500000) , ");
+  printLastPrefix();
+  freeRegion(p1);
+  printf(": freeRegion(p1) , ");
+  printLastPrefix();
+  arenaCheck();
+  printf(" Final State: \n");
+  p3 = nextFitAllocRegion(500000);
+  printf(": p3 = nextFitAllocRegion(500000) , ");
+  printLastPrefix();
+  arenaCheck();
+  freeRegion(p3);
+  printf(": freeRegion(p3) , ");
+  printLastPrefix();
+  freeRegion(p2);
+  printf(": freeRegion(p2) , ");
+  printLastPrefix();
+    
+ {				/* measure time for 10000 mallocs */
+    struct timeval t1, t2;
+    int i;
+    getutime(&t1);
+    for(i = 0; i < 10000; i++)
+      if (nextFitAllocRegion(4) == 0) 
+	break;
+    getutime(&t2);
+    printf("\n%d nextFitAllocRegion(4) required %f seconds\n", i, diffTimeval(&t2, &t1));
+  }
+  
+  return 0;
 }
 
 
