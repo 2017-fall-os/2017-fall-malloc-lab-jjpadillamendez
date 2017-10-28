@@ -12,7 +12,11 @@ int initReader(char *filename){
 }
 int closeReader(){
     if(file){
-        return (fclose(file) == 0);     // on successful close, it returns 0
+        int r = fclose(file);
+        if(r == 0){                       // on successful close, fclose returns 0
+            file = (FILE *) 0;        
+            return 1;
+        }
     }
     return 0;
 }

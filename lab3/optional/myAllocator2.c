@@ -55,7 +55,7 @@
 static BlockPrefix_t *lastPrefix = (BlockPrefix_t *)0;
 
 /* how much memory to ask for */
-const size_t DEFAULT_BRKSIZE = 0x100000;	/* 1M */
+const size_t DEFAULT_BRKSIZE = 0x200000;	/* 1M */
 
 /* create a block, mark it as free */
 BlockPrefix_t *makeFreeBlock(void *addr, size_t size) { 
@@ -194,9 +194,9 @@ void arenaCheck() {		/* consistency check */
 BlockPrefix_t *findFirstFit(size_t s) {	/* find first block with usable space > s */
     BlockPrefix_t *p = arenaBegin;
     while (p) {
-	if (!p->actualRequested && computeUsableSpace(p) >= s)
-	    return p;
-	p = getNextPrefix(p);
+        if ((!p->actualRequested) && computeUsableSpace(p) >= s)
+            return p;
+        p = getNextPrefix(p);
     }
     return growArena(s);
 }
@@ -228,15 +228,15 @@ void *firstFitAllocRegion(size_t s) {
     initializeArena();
   p = findFirstFit(s);		/* find a block */
   if (p && s > 0) {			/* found a block */
-    size_t availSize = computeUsableSpace(p);
-    if (availSize >= (asize + prefixSize + suffixSize + 8)) { /* split block? */
-      void *freeSliverStart = (void *)p + prefixSize + suffixSize + asize;
-      void *freeSliverEnd = computeNextPrefixAddr(p);
-      makeFreeBlock(freeSliverStart, freeSliverEnd - freeSliverStart);
-      makeFreeBlock(p, freeSliverStart - (void *)p); /* piece being allocated */
-    }
-    p->actualRequested = (int) s;		/* mark as allocated */
-    return prefixToRegion(p);	/* convert to *region */
+        size_t availSize = computeUsableSpace(p);
+        if (availSize >= (asize + prefixSize + suffixSize + 8)) { /* split block? */
+            void *freeSliverStart = (void *)p + prefixSize + suffixSize + asize;
+            void *freeSliverEnd = computeNextPrefixAddr(p);
+            makeFreeBlock(freeSliverStart, freeSliverEnd - freeSliverStart);
+            makeFreeBlock(p, freeSliverStart - (void *)p); /* piece being allocated */
+        }
+        p->actualRequested = (int) s;		/* mark as allocated */
+        return prefixToRegion(p);	/* convert to *region */
   }else {			/* failed */
     return (void *)0;
   }
@@ -376,6 +376,72 @@ size_t computeSpace(BlockPrefix_t *p) {
     return ((void *)(p->suffix) + suffixSize) - (void *)p;
 }
 
+#define TOTAL 0
+#define COUNT 1
+#define MAX 2
+#define MIN 3
+
+void printReport(int *report){
+    printf("\tTotal amount: %d \n", report[TOTAL]);
+    printf("\tNo of Blocks: %d \n", report[COUNT]);
+    printf("\tMaximum size: %d \n", report[MAX]);
+    printf("\tMinimum size: %d \n", report[MIN]);
+}
+void displayMemoryReport(){
+    if(arenaBegin){
+        BlockPrefix_t *p = arenaBegin;
+        int external[4], internal[4], actualUsed[4], overhead = 0;               // external and internal memory lost
+        int ti, te, tu;
+        for(int i=0; i < 4; i++){
+            external[i] = 0;
+            internal[i] = 0;
+            actualUsed[i] = 0;
+        }
+        external[MIN] = DEFAULT_BRKSIZE;                     
+        internal[MIN] = DEFAULT_BRKSIZE;
+        actualUsed[MIN] = DEFAULT_BRKSIZE;
+        
+        while(p){
+            if(p->actualRequested){
+                tu = computeUsableSpace(p);
+                ti = (tu - p->actualRequested);
+                if(ti > 0){                                     // Then there is internal fragmentation
+                    internal[TOTAL] += ti;
+                    internal[COUNT]++;
+                    if(ti > internal[MAX])
+                        internal[MAX] = ti;
+                    if(ti < internal[MIN])
+                        internal[MIN] = ti;
+                }
+                actualUsed[TOTAL] += tu;                        // Update usable allocated report
+                actualUsed[COUNT]++;
+                if(tu > actualUsed[MAX])
+                    actualUsed[MAX] = tu;
+                if(tu < actualUsed[MIN])
+                    actualUsed[MIN] = tu;
+            }else{
+                te = computeUsableSpace(p);                     // Update external fragmentation report
+                external[TOTAL] += te;
+                external[COUNT]++;
+                if(te > external[MAX])
+                    external[MAX] = te;
+                if(te < external[MIN])
+                    external[MIN] = te;
+            }
+            overhead += (suffixSize + prefixSize);
+            p = getNextPrefix(p);
+        }
+        printf("    Internal fragmentation\n");
+        printReport(internal);
+        printf("    External fragmentation\n");
+        printReport(external);
+        printf("    Allocated Regions\n");
+        printReport(actualUsed);
+        printf("    Overhead \n");
+        printf("\tTotal amount: %d \n", overhead);
+            
+    }
+}
 
 
 
