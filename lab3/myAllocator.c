@@ -341,6 +341,8 @@ void *nextFitAllocRegion(size_t s){
     asize = align8(s) + prefixSize + suffixSize;
     if(arenaBegin == 0){
         initializeArena();
+    }
+    if(lastPrefix == 0){
         lastPrefix = arenaBegin;
     }
     p = lastPrefix;         // check from last checked prefix

@@ -111,8 +111,8 @@ BlockPrefix_t *getPrevPrefix(BlockPrefix_t *p) { /* return addr of prev block, o
 BlockPrefix_t *coalescePrev(BlockPrefix_t *p) {	/* coalesce p with prev, return prev if coalesced, otherwise p */
     BlockPrefix_t *prev = getPrevPrefix(p);
     if (p && prev && (!p->actualRequested) && (!prev->actualRequested)){
-	makeFreeBlock(prev, ((void *)computeNextPrefixAddr(p)) - (void *)prev);
-	return prev;
+        makeFreeBlock(prev, ((void *)computeNextPrefixAddr(p)) - (void *)prev);
+        return prev;
     }
     return p;
 }    
@@ -166,22 +166,22 @@ void arenaCheck() {		/* consistency check */
     size_t amtFree = 0, amtAllocated = 0;
     int numBlocks = 0;
     while (p != 0) {		/* walk through arena */
-	fprintf(stderr, "  checking from %p, size=%8zd, actualRequested=%d...\n",
-		p, computeUsableSpace(p), p->actualRequested);
-	assert(pcheck(p));	/* p must remain within arena */
-	assert(pcheck(p->suffix)); /* suffix must be within arena */
-	assert(p->suffix->prefix == p);	/* suffix should reference prefix */
-	if (p->actualRequested) 	/* update allocated & free space */
-	    amtAllocated += computeUsableSpace(p);
-	else
-	    amtFree += computeUsableSpace(p);
-	numBlocks += 1;
-	p = computeNextPrefixAddr(p);
-	if (p == arenaEnd) {
-	    break;
-	} else {
-	    assert(pcheck(p));
-	}
+        fprintf(stderr, "  checking from %p, size=%8zd, actualRequested=%d...\n",
+            p, computeUsableSpace(p), p->actualRequested);
+        assert(pcheck(p));	/* p must remain within arena */
+        assert(pcheck(p->suffix)); /* suffix must be within arena */
+        assert(p->suffix->prefix == p);	/* suffix should reference prefix */
+        if (p->actualRequested) 	/* update allocated & free space */
+            amtAllocated += computeUsableSpace(p);
+        else
+            amtFree += computeUsableSpace(p);
+        numBlocks += 1;
+        p = computeNextPrefixAddr(p);
+        if (p == arenaEnd) {
+            break;
+        } else {
+            assert(pcheck(p));
+        }
     }
     fprintf(stderr,
 	    " mcheck: numBlocks=%d, amtAllocated=%zdk, amtFree=%zdk, arenaSize=%zdk\n",
@@ -193,7 +193,7 @@ void arenaCheck() {		/* consistency check */
 
 BlockPrefix_t *findFirstFit(size_t s) {	/* find first block with usable space > s */
     BlockPrefix_t *p = arenaBegin;
-    while (p) {
+    while(p){
         if ((!p->actualRequested) && computeUsableSpace(p) >= s)
             return p;
         p = getNextPrefix(p);
@@ -341,6 +341,8 @@ void *nextFitAllocRegion(size_t s){
     asize = align8(s) + prefixSize + suffixSize;
     if(arenaBegin == 0){
         initializeArena();
+    }
+    if(lastPrefix == 0){
         lastPrefix = arenaBegin;
     }
     p = lastPrefix;         // check from last checked prefix
@@ -439,7 +441,9 @@ void displayMemoryReport(){
         printReport(actualUsed);
         printf("    Overhead \n");
         printf("\tTotal amount: %d \n", overhead);
-            
+        
+        makeFreeBlock((void *) arenaBegin, (void *)arenaEnd - (void *)arenaBegin);
+       
     }
 }
 
