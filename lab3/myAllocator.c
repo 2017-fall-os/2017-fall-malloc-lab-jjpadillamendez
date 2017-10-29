@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <unistd.h>
 #include "myAllocator.h"
-
 /*
   This is a simple endogenous first-fit allocator.  
 
@@ -348,17 +347,10 @@ void *nextFitAllocRegion(size_t s){
     p = lastPrefix;         // check from last checked prefix
     if(lastPrefix){
         tp = p;
-        if(p = findNextFit(tp, arenaEnd, s))
-            availSize = computeUsableSpace(p);
-        else if(p = findNextFit(arenaBegin, tp, s))
-            availSize = computeUsableSpace(p);
-        else{
+        if(!(p=findNextFit(tp, arenaEnd, s)) && !(p=findNextFit(arenaBegin, tp, s)))
             p = growArena(s);
-            if(!p)
-                return (void *)0;               /* Check this */
-            availSize = computeUsableSpace(p);
-        }
         if(p){
+            availSize = computeUsableSpace(p);
             if(availSize >= (asize + 8)){     // split block ?
                 void *freeSliverStart = (void *)p + asize;
                 void *freeSliverEnd = computeNextPrefixAddr(p);
@@ -438,6 +430,9 @@ void *resizeRegion2(void *r, size_t newSize){
 // If next fit is used, this prints the last prefix that was checked
 void printLastPrefix(){
     printf("Last prefix: %p \n", lastPrefix);
+}
+void cleanArena(){
+    makeFreeBlock((void *) arenaBegin, (void *)arenaEnd - (void *)arenaBegin);
 }
 
 

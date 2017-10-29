@@ -1,29 +1,18 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "myAllocator.h"
+#include "allocatorTest.h"
 #include "sys/time.h"
 #include <sys/resource.h>
 #include <unistd.h>
+#include "bestFitTester.h"
 
-extern int algorithm;
-double diffTimeval(struct timeval *t1, struct timeval *t2) {
-  double d = (t1->tv_sec - t2->tv_sec) + (1.0e-6 * (t1->tv_usec - t2->tv_usec));
-  return d;
-}
-
-void getutime(struct timeval *t)
-{
-  struct rusage usage;
-  getrusage(RUSAGE_SELF, &usage);
-  *t = usage.ru_utime;
-}
-
-int main(){
+int runBestFitTest(){
   void *p1, *p2, *p3, *p4, *p5, *p6, *p7;
   
   
-  printf("\nTEST CASE 1: Best fit is the first fit free block .' bestFitAllocRegion(240)\n");
-  printf(" INITIAL STATE: \n");
+  printf("\nTEST CASE 1: Best fit is the first fit free block .' bestFitAllocRegion(252)\n");
+  printf(" :Initial State \n");
   p1 = bestFitAllocRegion(254);        // Allocate four different chuncks of memory 
   p2 = bestFitAllocRegion(25400);
   p3 = bestFitAllocRegion(300);
@@ -31,13 +20,13 @@ int main(){
   freeRegion(p1);                     // Free region p1 and p3
   freeRegion(p3);
   arenaCheck();
-  printf(" FINAL STATE: \n");
-  p3 = bestFitAllocRegion(240);      // Allocate new region at p3
+  printf(" :Final State \n");
+  p3 = bestFitAllocRegion(252);      // Allocate new region at p3
   arenaCheck();
   freeRegion(p2); freeRegion(p3); freeRegion(p4);
   
   printf("\nTEST CASE 2: Best fit is not the first fit free block .' bestFitAllocRegion(2550)\n");
-  printf(" INITIAL STATE: \n");
+  printf(" :Initial State \n");
   p1 = bestFitAllocRegion(1900);        // Allocate four different chuncks of memory 
   p2 = bestFitAllocRegion(2640);
   p3 = bestFitAllocRegion(200);
@@ -49,11 +38,18 @@ int main(){
   freeRegion(p4);
   freeRegion(p6);
   arenaCheck();
-  printf(" FINAL STATE: \n");
+  printf(" :Final State \n");
   p2 = bestFitAllocRegion(2550);      // Allocate new region at p3
   arenaCheck();
   freeRegion(p1); freeRegion(p2); freeRegion(p3);
   freeRegion(p5); freeRegion(p7);
+  
+  printf("\nTEST CASE 3: Requested size is bigger than the arena .' bestFitAllocRegion(2M)\n");
+  printf(" :Initial State \n");
+  arenaCheck();
+  printf(" :Final State \n");
+  p1 = bestFitAllocRegion(0x200000);
+  arenaCheck();
   
   {				/* measure time for 10000 mallocs */
     struct timeval t1, t2;

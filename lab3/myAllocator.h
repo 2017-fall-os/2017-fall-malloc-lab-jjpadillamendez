@@ -22,4 +22,5 @@ void *resizeRegion2(void *r, size_t newSize);
 void *bestFitAllocRegion(size_t s);
 void *nextFitAllocRegion(size_t s);
 void printLastPrefix();
+void cleanArena();
 #endif // myAllocator_H
