@@ -384,7 +384,8 @@ size_t computeSpace(BlockPrefix_t *p) {
 #define MIN 3
 
 void printReport(int *report){
-    printf("\tTotal amount: %d \n", report[TOTAL]);
+    double fraction = 100 * ((double)report[TOTAL]/(double)DEFAULT_BRKSIZE);
+    printf("\tTotal amount: %d   Fraction: %%%.2f\n", report[TOTAL], fraction);
     printf("\tNo of Blocks: %d \n", report[COUNT]);
     printf("\tMaximum size: %d \n", report[MAX]);
     printf("\tMinimum size: %d \n", report[MIN]);
@@ -440,7 +441,8 @@ void displayMemoryReport(){
         printf("    Allocated Regions\n");
         printReport(actualUsed);
         printf("    Overhead \n");
-        printf("\tTotal amount: %d \n", overhead);
+        double fraction = 100 * ((double)overhead/(double)DEFAULT_BRKSIZE);
+        printf("\tTotal amount: %d   Fraction: %%%.2f\n", overhead, fraction);
         
         makeFreeBlock((void *) arenaBegin, (void *)arenaEnd - (void *)arenaBegin);
        
