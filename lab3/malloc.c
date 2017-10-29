@@ -8,22 +8,22 @@
 #define align8(x) ((x+7) & ~7)
 
 /* first, the standard malloc functions */
-
+static int allocator = FIRST_FIT; 
 void *malloc(size_t NBYTES) {
-//     switch(algorithm){
-//         case FIRST_FIT:
-//             return firstFitAllocRegion(NBYTES);
-//         case BEST_FIT:
-//             return bestFitAllocRegion(NBYTES);
-//         case NEXT_FIT:
-//             return nextFitAllocRegion(NBYTES);
-//         default:
-//             return (void *)0;
-//     }
-    return firstFitAllocRegion(NBYTES);
+    switch(allocator){
+        case FIRST_FIT:
+            return firstFitAllocRegion(NBYTES);
+        case BEST_FIT:
+            return bestFitAllocRegion(NBYTES);
+        case NEXT_FIT:
+            return nextFitAllocRegion(NBYTES);
+    }
+    return (void *)0;
 }
 
-
+void changeAllocator(int newAllocator){
+    allocator = newAllocator;
+}
 
 void *realloc(void *APTR, size_t NBYTES) {
     return resizeRegion2(APTR, NBYTES);
