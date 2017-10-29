@@ -1,29 +1,58 @@
-# os-malloc
-This directory contains:
-
-myAllocator.c: a first-fit allocator
-myAllocator.h: its header file
-
-myAllocatorTest1.c: a test program for my allocator 
-
-malloc.c: a replacement for malloc that uses my allocator
-test1.c: a test program that uses this replacement malloc
-
-There are two different testers as some implementations of printf
-call malloc to allocate buffer space. This causes test1 to behave
-improperly as it uses myAllocator as a malloc replacement. In this
-case myAllocatorTest1 will function correctly. The only difference
-between the programs is that test1 uses myAllocator as a malloc
-replacement and myAllocatorTest1 uses myAllocator directly.
-
-Makefile: a fairly portable "makefile", targets "all" and "clean"
-
-To compile: 
- $ make 
-To clean:
+ # Malloc - Project 3 - Jesus Padilla #
+ 
+ This directory contains:
+ myAllocator.c: implements best-fit allocator and next-fit allocator. Additionally, it re-implements the resizeRegion function
+    - bestFitAllocRegion(size_t): implements best-fit algorithm
+    - nextFitAllocRegion(size_t): implements next-fit algorithm
+    - resizeRegion2(void *, size_t): re-implements the method resizeRegion(void *, size_t)
+ allocatorTest.c: implements test cases to check the methods of next-fit and best-fit
+ mallocTest.c: runs the same test cases as allocatorTest.c ; but, it calls malloc instead of calling directly the methods of myAllocator.c
+ resizeTest.c: implements test cases to check the re-implemented method resizeRegion2()
+ reallocTest.c: runs the same test cases as resizeTest.c; but, it calls realloc instead of calling directly the method resizeRegion2()
+ optional: this directory contains a program that reports the comparison between first-fit, best-fit, and next-fit algorithm.
+ 
+ To compile:
+ ~~~
+ $ make all
+ ~~~
+ 
+ To run it, try:
+ ~~~
+ $ ./allocatorTest
+ ~~~
+ ~~~
+ $ ./mallocTest
+ ~~~
+ ~~~
+ $ ./resizeTest
+ ~~~
+ ~~~
+ $ ./reallocTest
+ ~~~
+ 
+ To delete generated files:
+ ~~~
  $ make clean
+ ~~~
+ 
+TEST CASES FOR BEST-FIT ALGORITHM
+ 1. The best fit is the first fit free block 
+ 2. The best fit is not the first fit free block
+ 3. Requested size is bigger than the available free space
+ 
+TEST CASES FOR NEXT-FIT ALGORITHM
+ 1. Next fit region is the first fit it finds but last checked prefix is not at the beginning of the arena
+ 2. Prove that if a free region is not found searching forward, it returns to the beginning and searches until the last checked prefix
+ 3. Requested size is bigger than the available free space
 
-The cygwin runtime uses malloc() and brk() extensively.  It is
-interesting to compare the output of test1 & myAllocatorTest1.  All
-those extra allocated regions are being used by cygwin's libraries!
-
+TEST CASES FOR RE-SIZE REGION ALGORITHM
+ 1. Empty pointer is given (void *)
+ 2. Old size is large enough
+ 3. Next block is allocated, impossible to extend
+ 4. Usable space of next block is large enough to satisfy the request
+ 5. Usable space is not enough, but adding unused prefix and suffix size, it fits in
+ 6. Space of next block is just not large enough
+ 
+IMPORTANT NOTES
+- The extra credit task of adding for each gragment and each allocated region: count, maximum, and minimum sizes was done
+- The file assert2.c was borrowed from Dr. Freudenthal, which adds the feature of adding an error message to the traditional assert method. 
