@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////////////////////////
+// Author: Jesus Jose Padilla Mendez    Lab Assignment 3            //
+// Prof: Dr. Freudenthal    TA: Adrian Veliz                        //
+// Tester that runs different test cases to check the new method    //
+// resizeRegion2(); which just extends the same region if possible  //
+// otherwise, it just copies the data to other free region          //
+//////////////////////////////////////////////////////////////////////
 #include "stdio.h"
 #include "stdlib.h"
 #include "myAllocator.h"
@@ -55,4 +62,5 @@ int main(){
     printf("- Final State   -- p3 at %p\n", p3-8);
     arenaCheck();
     return 0;
+    
 }

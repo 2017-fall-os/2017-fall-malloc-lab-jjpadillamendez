@@ -1,3 +1,9 @@
+//////////////////////////////////////////////////////////////////////
+// Author: Jesus Jose Padilla Mendez    Lab Assignment 3            //
+// Prof: Dr. Freudenthal    TA: Adrian Veliz                        //
+// Tester that runs different test cases to check the new memory    //
+// allocator methods Best fit and Next fit                          //
+//////////////////////////////////////////////////////////////////////
 #include "stdio.h"
 #include "stdlib.h"
 #include "myAllocator.h"

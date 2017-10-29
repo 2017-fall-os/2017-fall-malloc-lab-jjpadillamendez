@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////////////
+// Author: Jesus Jose Padilla Mendez    Lab Assignment 3  //
+// Prof: Dr. Freudenthal    TA: Adrian Veliz              //
+// Implementation of Best-fit and First-fit free-memory   //
+// management, and resizeRegion                           //
+////////////////////////////////////////////////////////////
 #ifndef myAllocator_H
 #define myAllocator_H
 
