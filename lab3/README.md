@@ -9,7 +9,7 @@
 <br /> mallocTest.c: runs the same test cases as allocatorTest.c ; but, it calls malloc instead of calling directly the methods of myAllocator.c
 <br /> resizeTest.c: implements test cases to check the re-implemented method resizeRegion2()
 <br /> reallocTest.c: runs the same test as resizeTest.c; but, it calls realloc instead of directly calling the method resizeRegion2()
-<br />optional: this directory contains a program that reports the comparison between first-fit, best-fit, and next-fit algorithm.
+<br />optional: this directory contains a program that reports the comparison between first-fit, best-fit, and next-fit algorithm. To run this report, it is needed to enter the directory, make all, and run the command ./report. This directory contains an example of the report.
  
  To compile:
  ~~~
@@ -57,11 +57,22 @@
  
 <b>TEST CASES FOR RE-SIZE REGION ALGORITHM</b>
  1. Empty pointer is given (void *)
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/resizec1.jpg?raw=true)
+ 
  2. Old size is large enough
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/resizec2.jpg?raw=true)
+ 
  3. Next block is allocated, impossible to extend
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/resizec3.jpg?raw=true)
+ 
  4. Usable space of next block is large enough to satisfy the request
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/resizec4.jpg?raw=true)
+ 
  5. Usable space is not enough, but adding unused prefix and suffix size, it fits in
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/resizec5.jpg?raw=true)
+ 
  6. Space of next block is just not large enough
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/resizec6.jpg?raw=true)
  
 <b>IMPORTANT NOTES</b>
 - The extra credit task of adding for each gragment and each allocated region: count, maximum, and minimum sizes was done
