@@ -453,7 +453,21 @@ void cleanArena(){
     makeFreeBlock((void *) arenaBegin, (void *)arenaEnd - (void *)arenaBegin);
     
 }
-
+void *memalign2(size_t ALIGN, size_t NBYTES) { /* ignore ALIGN -- hack -- */
+    int size = NBYTES + prefixSize + suffixSize;
+    size = ((size+(ALIGN-1)) & ~(ALIGN-1));
+    
+    void *pr = firstFitAllocRegion((2 * size));         // Allocate a temporary double the size
+    BlockPrefix_t *p = regionToPrefix(pr);
+    void *freeSliverStart = (void *)p + size - ((int)p - ((int)p & ~(ALIGN-1)))-prefixSize;   // Divide the allocated region
+    void *freeSliverEnd = computeNextPrefixAddr(p);
+    makeFreeBlock(freeSliverStart, freeSliverEnd - freeSliverStart);
+    makeFreeBlock(p, freeSliverStart - (void*)p);
+    BlockPrefix_t *pr1 = getNextPrefix(p);
+    pr1->allocated = 1;
+    void *p1 = prefixToRegion(pr1);
+    return p1;
+}
 
 
 

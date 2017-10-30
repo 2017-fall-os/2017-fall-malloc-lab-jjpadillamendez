@@ -76,4 +76,5 @@
  
 <b>IMPORTANT NOTES</b>
 - The extra credit task of adding for each fragment and each allocated region: count, maximum, and minimum sizes was done
+- The extra credit of the memalign was added
 - The file assert2.c was borrowed from Dr. Freudenthal, which adds the feature of adding an error message to the traditional assert method. 

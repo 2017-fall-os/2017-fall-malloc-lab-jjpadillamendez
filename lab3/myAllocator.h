@@ -29,4 +29,6 @@ void *bestFitAllocRegion(size_t s);
 void *nextFitAllocRegion(size_t s);
 void printLastPrefix();
 void cleanArena();
+void *memalign2(size_t ALIGN, size_t NBYTES);
+
 #endif // myAllocator_H
