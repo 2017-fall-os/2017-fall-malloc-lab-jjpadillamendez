@@ -6,10 +6,10 @@
  <br />      - nextFitAllocRegion(size_t): implements next-fit algorithm
  <br />      - resizeRegion2(void *, size_t): re-implements the method resizeRegion(void *, size_t)
 <br /> allocatorTest.c: implements test cases to check the methods of next-fit and best-fit
-<br /> mallocTest.c: runs the same test cases as allocatorTest.c ; but, it calls malloc instead of calling directly the methods of myAllocator.c
+<br /> mallocTest.c: runs the same test cases as allocatorTest.c ; but, it calls malloc instead of calling directly the methods of <br />.___ myAllocator.c
 <br /> resizeTest.c: implements test cases to check the re-implemented method resizeRegion2()
 <br /> reallocTest.c: runs the same test as resizeTest.c; but, it calls realloc instead of directly calling the method resizeRegion2()
-<br />optional: this directory contains a program that reports the comparison between first-fit, best-fit, and next-fit algorithm. To run this report, it is needed to enter the directory, make all, and run the command ./report. This directory contains an example of the report.
+<br />optional: this directory contains a program that reports the comparison between first-fit, best-fit, and next-fit algorithm. To   <br />.___  run this report, it is needed to enter the directory, make all, and run the command ./report. This directory contains <br />.___               an example of the report.
  
  To compile:
  ~~~
