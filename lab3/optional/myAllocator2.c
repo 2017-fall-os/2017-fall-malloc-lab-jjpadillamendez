@@ -383,12 +383,14 @@ void printReport(int *report){
     printf("\tMaximum size: %d \n", report[MAX]);
     printf("\tMinimum size: %d \n", report[MIN]);
 }
+// Computes the information about external fragmentation, internal fragmentation, allocated regions
+// and overhead. Then, displays a report about it
 void displayMemoryReport(){
     if(arenaBegin){
         BlockPrefix_t *p = arenaBegin;
         int external[4], internal[4], actualUsed[4], overhead = 0;               // external and internal memory lost
         int ti, te, tu;
-        for(int i=0; i < 4; i++){
+        for(int i=0; i < 4; i++){                               // Init arrays
             external[i] = 0;
             internal[i] = 0;
             actualUsed[i] = 0;
@@ -427,7 +429,7 @@ void displayMemoryReport(){
             overhead += (suffixSize + prefixSize);
             p = getNextPrefix(p);
         }
-        printf("    Internal fragmentation\n");
+        printf("    Internal fragmentation\n");                 // Display report
         printReport(internal);
         printf("    External fragmentation\n");
         printReport(external);
@@ -438,6 +440,7 @@ void displayMemoryReport(){
         printf("\tTotal amount: %d   Fraction: %%%.2f\n", overhead, fraction);
         
         makeFreeBlock((void *) arenaBegin, (void *)arenaEnd - (void *)arenaBegin);
+        // This clears the arena, it is just used to swap between allocators and run the report
        
     }
 }

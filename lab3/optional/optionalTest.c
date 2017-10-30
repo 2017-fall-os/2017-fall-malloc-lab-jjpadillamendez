@@ -24,9 +24,11 @@ void getutime(struct timeval *t){
   getrusage(RUSAGE_SELF, &usage);
   *t = usage.ru_utime;
 }
+// Returns a number between the range
 int rand2(int v, int max, int min){
     return (v % (max - min)) + min;
 }
+// It is not really a malloc, it just calls directly between the different allocators
 void *malloc2(int allocator, int size){
     switch(allocator){
         case FIRST_FIT:
@@ -38,6 +40,7 @@ void *malloc2(int allocator, int size){
     }
     return (void *)0;
 }
+// Displays a Report of the Memory Usage
 void runTest(int allocator){
     int v, r, size = 0, numOfRegions;
     int *p1, stop = 0, numOfAllocs = 0;

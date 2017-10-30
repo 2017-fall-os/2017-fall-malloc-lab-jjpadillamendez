@@ -9,7 +9,7 @@
 <br /> mallocTest.c: runs the same test cases as allocatorTest.c ; but, it calls malloc instead of calling directly the methods of <br />.___ myAllocator.c
 <br /> resizeTest.c: implements test cases to check the re-implemented method resizeRegion2()
 <br /> reallocTest.c: runs the same test as resizeTest.c; but, it calls realloc instead of directly calling the method resizeRegion2()
-<br />optional: this directory contains a program that reports the comparison between first-fit, best-fit, and next-fit algorithm. To   <br />.___  run this report, it is needed to enter the directory, make all, and run the command ./report. This directory contains <br />.___               an example of the report.
+<br />optional: this directory contains a program that reports the comparison between first-fit, best-fit, and next-fit algorithm. To   <br />.___  run this report, it is needed to enter the directory, make all, and run the command ./report. This directory contains <br />.___               an example of the report (in report.txt).
  
  To compile:
  ~~~
@@ -75,5 +75,5 @@
  ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/resizec6.jpg?raw=true)
  
 <b>IMPORTANT NOTES</b>
-- The extra credit task of adding for each gragment and each allocated region: count, maximum, and minimum sizes was done
+- The extra credit task of adding for each fragment and each allocated region: count, maximum, and minimum sizes was done
 - The file assert2.c was borrowed from Dr. Freudenthal, which adds the feature of adding an error message to the traditional assert method. 

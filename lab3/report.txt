@@ -1,0 +1,69 @@
+
+First Fit Memory Allocator Report
+    Internal fragmentation
+	Total amount: 16236   Fraction: %0.77
+	No of Blocks: 3575 
+	Maximum size: 23 
+	Minimum size: 1 
+    External fragmentation
+	Total amount: 2120   Fraction: %0.10
+	No of Blocks: 88 
+	Maximum size: 224 
+	Minimum size: 8 
+    Allocated Regions
+	Total amount: 2028328   Fraction: %96.72
+	No of Blocks: 4081 
+	Maximum size: 1008 
+	Minimum size: 8 
+    Overhead 
+	Total amount: 66704   Fraction: %3.18
+    Failed Allocation
+	Amount:       552 
+   Average Time to Allocate One Block
+	time:         41.7499 microseconds
+
+Best Fit Memory Allocator Report
+    Internal fragmentation
+	Total amount: 15892   Fraction: %0.76
+	No of Blocks: 3569 
+	Maximum size: 23 
+	Minimum size: 1 
+    External fragmentation
+	Total amount: 2152   Fraction: %0.10
+	No of Blocks: 72 
+	Maximum size: 640 
+	Minimum size: 8 
+    Allocated Regions
+	Total amount: 2028536   Fraction: %96.73
+	No of Blocks: 4082 
+	Maximum size: 1008 
+	Minimum size: 8 
+    Overhead 
+	Total amount: 66464   Fraction: %3.17
+    Failed Allocation
+	Amount:       693 
+   Average Time to Allocate One Block
+	time:         31.7555 microseconds
+
+Next Fit Memory Allocator Report
+    Internal fragmentation
+	Total amount: 12679   Fraction: %0.60
+	No of Blocks: 3107 
+	Maximum size: 22 
+	Minimum size: 1 
+    External fragmentation
+	Total amount: 265360   Fraction: %12.65
+	No of Blocks: 658 
+	Maximum size: 976 
+	Minimum size: 8 
+    Allocated Regions
+	Total amount: 1764320   Fraction: %84.13
+	No of Blocks: 3559 
+	Maximum size: 1008 
+	Minimum size: 8 
+    Overhead 
+	Total amount: 67472   Fraction: %3.22
+    Failed Allocation
+	Amount:       987 
+   Average Time to Allocate One Block
+	time:         0.2290 microseconds
