@@ -35,7 +35,7 @@
  $ make clean
  ~~~
  
-TEST CASES FOR BEST-FIT ALGORITHM
+<b>TEST CASES FOR BEST-FIT ALGORITHM</b>
  1. The best fit is the first fit free block 
  ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/bestc1.jpg?raw=true)
  
@@ -45,7 +45,7 @@ TEST CASES FOR BEST-FIT ALGORITHM
  3. Requested size is bigger than the available free space
  ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/bestc3.jpg?raw=true)
  
-TEST CASES FOR NEXT-FIT ALGORITHM
+<b>TEST CASES FOR NEXT-FIT ALGORITHM</b>
  1. Next fit region is the first fit it finds but last checked prefix is not at the beginning of the arena
  ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/nextc1.jpg?raw=true)
  
@@ -55,7 +55,7 @@ TEST CASES FOR NEXT-FIT ALGORITHM
  3. Requested size is bigger than the available free space
  ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/nextc3.jpg?raw=true)
  
-TEST CASES FOR RE-SIZE REGION ALGORITHM
+<b>TEST CASES FOR RE-SIZE REGION ALGORITHM</b>
  1. Empty pointer is given (void *)
  2. Old size is large enough
  3. Next block is allocated, impossible to extend
@@ -63,6 +63,6 @@ TEST CASES FOR RE-SIZE REGION ALGORITHM
  5. Usable space is not enough, but adding unused prefix and suffix size, it fits in
  6. Space of next block is just not large enough
  
-IMPORTANT NOTES
+<b>IMPORTANT NOTES</b>
 - The extra credit task of adding for each gragment and each allocated region: count, maximum, and minimum sizes was done
 - The file assert2.c was borrowed from Dr. Freudenthal, which adds the feature of adding an error message to the traditional assert method. 
