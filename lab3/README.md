@@ -37,19 +37,24 @@
  
 TEST CASES FOR BEST-FIT ALGORITHM
  1. The best fit is the first fit free block 
- ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/tree/master/lab3/testImage/bestc1.jpg?raw=true)
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/bestc1.jpg?raw=true)
+ 
  2. The best fit is not the first fit free block
- ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/tree/master/lab3/testImage/bestc2.jpg?raw=true)
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/bestc2.jpg?raw=true)
+ 
  3. Requested size is bigger than the available free space
- ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/tree/master/lab3/testImage/bestc3.jpg?raw=true)
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/bestc3.jpg?raw=true)
  
 TEST CASES FOR NEXT-FIT ALGORITHM
  1. Next fit region is the first fit it finds but last checked prefix is not at the beginning of the arena
- ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/tree/master/lab3/testImage/nextc1.jpg?raw=true)
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/nextc1.jpg?raw=true)
+ 
  2. Prove that if a free region is not found searching forward, it returns to the beginning and searches until the last checked prefix
- ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/tree/master/lab3/testImage/nextc2.jpg?raw=true)
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/nextc2.jpg?raw=true)
+ 
  3. Requested size is bigger than the available free space
- ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/tree/master/lab3/testImage/nextc3.jpg?raw=true)
+ ![Alt text](https://github.com/2017-fall-os/2017-fall-malloc-lab-jjpadillamendez/blob/master/lab3/testImage/nextc3.jpg?raw=true)
+ 
 TEST CASES FOR RE-SIZE REGION ALGORITHM
  1. Empty pointer is given (void *)
  2. Old size is large enough
